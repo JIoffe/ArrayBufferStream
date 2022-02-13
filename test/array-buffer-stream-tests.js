@@ -804,6 +804,194 @@ describe('ArrayBufferStream Tests', () => {
         });
     });
 
+    describe('Can write and read UNORM8 values', () => {
+        it('Should write and read single UNORM8 values', (done) => {
+            arrayBufferStream.writeUNorm8(0.2);
+            arrayBufferStream.writeUNorm8(0.5);
+            arrayBufferStream.writeUNorm8(1);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(0.2, 0.01);
+
+            a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(0.5, 0.01);
+
+            a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(1, 0.01);
+            done();
+        });
+
+        it('Should write multiple UNORM8 values', (done) => {
+            arrayBufferStream.writeUNorm8(0.2, 0.5, 1);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(0.2, 0.01);
+
+            a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(0.5, 0.01);
+
+            a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(1, 0.01);
+            done();
+        });
+
+        it('Should write multiple UNORM8 values using spread', (done) => {
+            const values = [0.2, 0.5, 1];
+            arrayBufferStream.writeUNorm8(...values);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(0.2, 0.01);
+
+            a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(0.5, 0.01);
+
+            a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(1, 0.01);
+            done();
+        });
+
+        it('Should read and write UNORM8 arrays', (done) => {
+            const values = new Float32Array([0.2, 0.5, 1]);
+            arrayBufferStream.writeUNorm8(...values);
+
+            arrayBufferStream.setCursor(0);
+
+            let array = arrayBufferStream.getNextUNorm8Array(3);
+
+            array.length.should.be.a('number');
+            array.length.should.equal(3);
+
+            array[0].should.be.approximately(0.2, 0.01);
+            array[1].should.be.approximately(0.5, 0.01);
+            array[2].should.be.approximately(1, 0.01);
+            done();
+        });
+
+        it('Should read into buffer with offset', (done) => {
+            const buffer = new Float32Array(8).fill(0);
+            const values = new Float32Array([0.2, 0.5, 1]);
+            arrayBufferStream.writeUNorm8(...values);
+
+            arrayBufferStream.setCursor(0);
+
+            let array = arrayBufferStream.getNextUNorm8Array(3, buffer, 1);
+
+            array[0].should.be.approximately(0, 0.001);
+            array[1].should.be.approximately(0.2, 0.01);
+            array[2].should.be.approximately(0.5, 0.01);
+            array[3].should.be.approximately(1, 0.01);
+            done();
+        });
+
+        it('Should throw when writing UNORM8 out of bounds', (done) => {
+            should.throw(() => {
+                arrayBufferStream.setCursor(64);
+                arrayBufferStream.writeUNorm8(1);
+            });
+            done();
+        });
+    });
+
+    describe('Can write and read UNORM16 values', () => {
+        it('Should write and read single UNORM16 values', (done) => {
+            arrayBufferStream.writeUNorm16(0.2);
+            arrayBufferStream.writeUNorm16(0.5);
+            arrayBufferStream.writeUNorm16(1);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(0.2, 0.001);
+
+            a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(0.5, 0.001);
+
+            a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(1, 0.001);
+            done();
+        });
+
+        it('Should write multiple UNORM16 values', (done) => {
+            arrayBufferStream.writeUNorm16(0.2, 0.5, 1);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(0.2, 0.001);
+
+            a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(0.5, 0.001);
+
+            a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(1, 0.001);
+            done();
+        });
+
+        it('Should write multiple UNORM16 values using spread', (done) => {
+            const values = [0.2, 0.5, 1];
+            arrayBufferStream.writeUNorm16(...values);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(0.2, 0.001);
+
+            a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(0.5, 0.001);
+
+            a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(1, 0.001);
+            done();
+        });
+
+        it('Should read and write UNORM16 arrays', (done) => {
+            const values = new Float32Array([0.2, 0.5, 1]);
+            arrayBufferStream.writeUNorm16(...values);
+
+            arrayBufferStream.setCursor(0);
+
+            let array = arrayBufferStream.getNextUNorm16Array(3);
+
+            array.length.should.be.a('number');
+            array.length.should.equal(3);
+
+            array[0].should.be.approximately(0.2, 0.001);
+            array[1].should.be.approximately(0.5, 0.001);
+            array[2].should.be.approximately(1, 0.001);
+            done();
+        });
+
+        it('Should read into buffer with offset', (done) => {
+            const buffer = new Float32Array(8).fill(0);
+            const values = new Float32Array([0.2, 0.5, 1]);
+            arrayBufferStream.writeUNorm16(...values);
+
+            arrayBufferStream.setCursor(0);
+
+            let array = arrayBufferStream.getNextUNorm16Array(3, buffer, 1);
+
+            array[0].should.be.approximately(0, 0.001);
+            array[1].should.be.approximately(0.2, 0.001);
+            array[2].should.be.approximately(0.5, 0.001);
+            array[3].should.be.approximately(1, 0.001);
+            done();
+        });
+
+        it('Should throw when writing UNORM8 out of bounds', (done) => {
+            should.throw(() => {
+                arrayBufferStream.setCursor(64);
+                arrayBufferStream.writeUNorm8(1);
+            });
+            done();
+        });
+    });
+
     describe('Can write and read ASCII strings', () => {
         it('Should write and read ASCII string', (done) => {
             arrayBufferStream.writeASCIIString('Test');

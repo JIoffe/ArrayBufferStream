@@ -11,7 +11,9 @@ Additional changes or enhancements will be added based on need.
 
  - UINT8, UINT16, UINT32
  - FLOAT32, FLOAT64
+ - UNORM8, UNORM16 (float in range 0-1, with 8 or 16 bit precision)
  - ASCII strings
+Note: For performance, bounds are not checked for integral types. Clamp values as necessary or unexpected values may be written on byte overflow.
 ## Installation
 Using **NPM**:
 

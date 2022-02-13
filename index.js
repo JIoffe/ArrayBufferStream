@@ -1,3 +1,6 @@
+const BYTE_TO_NORM = 1 / 0xFF;
+const SHORT_TO_NORM = 1 / 0xFFFF;
+
 /**
  * Wraps an ArrayBuffer object with a stream-like interface
  * for read and write operations.
@@ -315,6 +318,86 @@ class ArrayBufferStream{
         for(let i = 0; i < length; ++i){
             dest[i + offset] = this.dv.getInt32(this.cursor, this.littleEndian);
             this.cursor += 4;
+        }
+
+        return dest;
+    }
+
+    /**
+     * Encodes a float between 0-1 as UINT8, advances cursor
+     * @param  {...number} val 
+     */
+    writeUNorm8(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setUint8(this.cursor++, Math.floor(val[i] * 0xFF), this.littleEndian);
+        }
+    }
+
+    /**
+     * Reads float between 0-1 encoded as a UINT8, advances cursor
+     */
+    getNextUNorm8(){
+        return this.dv.getUint8(this.cursor++, this.littleEndian) * BYTE_TO_NORM;
+
+    }
+
+    /**
+     * Reads a series of UNORM8 values into a destination buffer.
+     * If a buffer is not provided, then new Float32Array will be created.
+     * @param {number} length number of values to read
+     * @param {ArrayLike<number>} [dest=null] destination buffer
+     * @param {number} [offset=0] write offset in destination buffer
+     * @returns 
+     */
+     getNextUNorm8Array(length, dest, offset){
+        dest = dest || new Float32Array(length);
+        offset = Math.floor(offset || 0);
+
+        for(let i = 0; i < length; ++i){
+            dest[i + offset] = this.dv.getUint8(this.cursor++, this.littleEndian) * BYTE_TO_NORM;
+        }
+
+        return dest;
+    }
+
+    /**
+     * Encodes a float between 0-1 as UINT16, advances cursor
+     * @param  {...number} val 
+     */
+     writeUNorm16(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setUint16(this.cursor, Math.floor(val[i] * 0xFFFF), this.littleEndian);
+            this.cursor += 2;
+        }
+    }
+
+    /**
+     * Reads float between 0-1 encoded as a UINT16, advances cursor
+     */
+    getNextUNorm16(){
+        const val = this.dv.getUint16(this.cursor, this.littleEndian);
+        this.cursor += 2;
+
+        return val * SHORT_TO_NORM;
+    }
+
+    /**
+     * Reads a series of UNORM16 values into a destination buffer.
+     * If a buffer is not provided, then new Float32Array will be created.
+     * @param {number} length number of values to read
+     * @param {ArrayLike<number>} [dest=null] destination buffer
+     * @param {number} [offset=0] write offset in destination buffer
+     * @returns 
+     */
+     getNextUNorm16Array(length, dest, offset){
+        dest = dest || new Float32Array(length);
+        offset = Math.floor(offset || 0);
+
+        for(let i = 0; i < length; ++i){
+            dest[i + offset] = this.dv.getUint16(this.cursor, this.littleEndian) * SHORT_TO_NORM;
+            this.cursor += 2;
         }
 
         return dest;
