@@ -1,5 +1,5 @@
 {
-  "name": "arraybufferstream",
+  "name": "@jioffe/arraybufferstream",
   "version": "0.8.0",
   "description": "Utility for read and write operations on ArrayBuffer instances",
   "main": "index.js",
