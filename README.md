@@ -2,6 +2,8 @@
 # ArrayBufferStream
 Utility to streamline read and write operations on ArrayBuffer instances. This is exposed as an ES6 module which is compatible with both browsers and current versions of Node.js.
 
+This can be useful for processing files, WebSocket messages, or other cases where binary data is utilized.
+
 Most methods are direct wrappers on top of the built-in [DataView](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView) implementation.
 
 Additional changes or enhancements will be added based on need.
@@ -10,6 +12,34 @@ Additional changes or enhancements will be added based on need.
  - UINT8, UINT16, UINT32
  - FLOAT32, FLOAT64
  - ASCII strings
+## Installation
+Using **NPM**:
+
+    npm i @jioffe/arraybufferstream
+To use:
+
+    import  ArrayBufferStream  from  "@jioffe/arraybufferstream";
+Example:
+```js
+import  ArrayBufferStream  from  "@jioffe/arraybufferstream";
+
+const  stream = new  ArrayBufferStream(64);
+
+stream.writeInt32(55);
+stream.writeFloat32(5.5);
+stream.writeASCIIString("Hello World");
+
+stream.setCursor(0);
+
+console.log(
+	stream.getNextInt32(),
+	stream.getNextFloat32(),
+	stream.getNextASCIIString()
+);
+```
+This will output:
+
+    >>> 55 5.5 Hello World
 
 ## Testing
     npm run test
