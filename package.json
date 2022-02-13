@@ -1,0 +1,29 @@
+{
+  "name": "arraybufferstream",
+  "version": "0.8.0",
+  "description": "Utility for read and write operations on ArrayBuffer instances",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JIoffe/ArrayBufferStream.git"
+  },
+  "keywords": [
+    "ArrayBuffer",
+    "DataView",
+    "Binary"
+  ],
+  "author": "Jason Ioffe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JIoffe/ArrayBufferStream/issues"
+  },
+  "homepage": "https://github.com/JIoffe/ArrayBufferStream#readme",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^9.2.0"
+  }
+}
