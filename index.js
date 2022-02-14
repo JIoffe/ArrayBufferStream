@@ -93,6 +93,18 @@ class ArrayBufferStream{
     }
 
     /**
+     * Adds numeric value(s) as UINT8, advances cursor.
+     * Value is clamped to UINT8 range
+     * @param  {...number} val 
+     */
+    writeUint8Clamped(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setUint8(this.cursor++, Math.max(0, Math.min(0xFF, val[i])));
+        }
+    }
+
+    /**
      * Reads single UINT8 as number, advances cursor
      */
     getNextUint8(){
@@ -130,6 +142,18 @@ class ArrayBufferStream{
     }
 
     /**
+     * Adds numeric value(s) as INT8, advances cursor.
+     * Value is clamped to INT8 range
+     * @param  {...number} val 
+     */
+    writeInt8Clamped(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setInt8(this.cursor++, Math.max(-128, Math.min(0x7F, val[i])));
+        }
+    }
+
+    /**
      * Reads INT8 as number, advances cursor
      */
     getNextInt8(){
@@ -144,7 +168,7 @@ class ArrayBufferStream{
      * @param {number} [offset=0] write offset in destination buffer
      * @returns 
      */
-     getNextInt8Array(length, dest, offset){
+    getNextInt8Array(length, dest, offset){
         dest = dest || new Int8Array(length);
         offset = Math.floor(offset || 0);
 
@@ -159,10 +183,23 @@ class ArrayBufferStream{
      * Adds numeric value(s) as UINT16, advances cursor
      * @param  {...number} val 
      */
-     writeUint16(...val){
+    writeUint16(...val){
         const n = val?.length;
         for(let i = 0; i < n; ++i){
             this.dv.setUint16(this.cursor, val[i], this.littleEndian);
+            this.cursor += 2;
+        }
+    }
+
+    /**
+     * Adds numeric value(s) as UINT16, advances cursor.
+     * Value is clamped to UINT16 range
+     * @param  {...number} val 
+     */
+    writeUint16Clamped(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setUint16(this.cursor, Math.max(0, Math.min(0xFFFF, val[i])), this.littleEndian);
             this.cursor += 2;
         }
     }
@@ -185,7 +222,7 @@ class ArrayBufferStream{
      * @param {number} [offset=0] write offset in destination buffer
      * @returns 
      */
-     getNextUint16Array(length, dest, offset){
+    getNextUint16Array(length, dest, offset){
         dest = dest || new Uint16Array(length);
         offset = Math.floor(offset || 0);
 
@@ -210,6 +247,19 @@ class ArrayBufferStream{
     }
 
     /**
+     * Adds numeric value(s) as INT16, advances cursor.
+     * Value is clamped to INT16 range
+     * @param  {...number} val 
+     */
+    writeInt16Clamped(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setInt16(this.cursor, Math.max(-32768, Math.min(0x7FFF, val[i])), this.littleEndian);
+            this.cursor += 2;
+        }
+    }
+
+    /**
      * Reads INT16 as number, advances cursor
      */
     getNextInt16(){
@@ -227,7 +277,7 @@ class ArrayBufferStream{
      * @param {number} [offset=0] write offset in destination buffer
      * @returns 
      */
-     getNextInt16Array(length, dest, offset){
+    getNextInt16Array(length, dest, offset){
         dest = dest || new Int16Array(length);
         offset = Math.floor(offset || 0);
 
@@ -243,10 +293,23 @@ class ArrayBufferStream{
      * Adds numeric value(s) as UINT32, advances cursor
      * @param  {...number} val 
      */
-     writeUint32(...val){
+    writeUint32(...val){
         const n = val?.length;
         for(let i = 0; i < n; ++i){
             this.dv.setUint32(this.cursor, val[i], this.littleEndian);
+            this.cursor += 4;
+        }
+    }
+
+    /**
+     * Adds numeric value(s) as INT32, advances cursor.
+     * Value is clamped to INT32 range
+     * @param  {...number} val 
+     */
+    writeUint32Clamped(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setUint32(this.cursor, Math.max(0, Math.min(0xFFFFFFFF, val[i])), this.littleEndian);
             this.cursor += 4;
         }
     }
@@ -269,7 +332,7 @@ class ArrayBufferStream{
      * @param {number} [offset=0] write offset in destination buffer
      * @returns 
      */
-     getNextUint32Array(length, dest, offset){
+    getNextUint32Array(length, dest, offset){
         dest = dest || new Uint32Array(length);
         offset = Math.floor(offset || 0);
 
@@ -293,6 +356,18 @@ class ArrayBufferStream{
         }
     }
 
+    /**
+     * Adds numeric value(s) as INT32, advances cursor.
+     * Value is clamped to INT32 range
+     * @param  {...number} val 
+     */
+     writeInt32Clamped(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setInt32(this.cursor, Math.max(-2147483648, Math.min(0x7FFFFFFF, val[i])), this.littleEndian);
+            this.cursor += 4;
+        }
+    }
     /**
      * Reads INT32 as number, advances cursor
      */
@@ -335,6 +410,17 @@ class ArrayBufferStream{
     }
 
     /**
+     * Encodes a float between 0-1 (clamped) as UINT8, advances cursor
+     * @param  {...number} val 
+     */
+     writeUNorm8Clamped(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setUint8(this.cursor++, Math.min(0xFF, Math.max(0, Math.floor(val[i] * 0xFF))), this.littleEndian);
+        }
+    }
+
+    /**
      * Reads float between 0-1 encoded as a UINT8, advances cursor
      */
     getNextUNorm8(){
@@ -365,10 +451,22 @@ class ArrayBufferStream{
      * Encodes a float between 0-1 as UINT16, advances cursor
      * @param  {...number} val 
      */
-     writeUNorm16(...val){
+    writeUNorm16(...val){
         const n = val?.length;
         for(let i = 0; i < n; ++i){
             this.dv.setUint16(this.cursor, Math.floor(val[i] * 0xFFFF), this.littleEndian);
+            this.cursor += 2;
+        }
+    }
+
+    /**
+     * Encodes a float between 0-1 (clamped) as UINT16, advances cursor
+     * @param  {...number} val 
+     */
+    writeUNorm16Clamped(...val){
+        const n = val?.length;
+        for(let i = 0; i < n; ++i){
+            this.dv.setUint16(this.cursor, Math.min(0xFFFF, Math.max(0, Math.floor(val[i] * 0xFFFF))), this.littleEndian);
             this.cursor += 2;
         }
     }
@@ -391,7 +489,7 @@ class ArrayBufferStream{
      * @param {number} [offset=0] write offset in destination buffer
      * @returns 
      */
-     getNextUNorm16Array(length, dest, offset){
+    getNextUNorm16Array(length, dest, offset){
         dest = dest || new Float32Array(length);
         offset = Math.floor(offset || 0);
 
@@ -407,7 +505,7 @@ class ArrayBufferStream{
      * Adds numeric value(s) as FLOAT32, advances cursor
      * @param  {...number} val 
      */
-     writeFloat32(...val){
+    writeFloat32(...val){
         const n = val?.length;
         for(let i = 0; i < n; ++i){
             this.dv.setFloat32(this.cursor, val[i], this.littleEndian);
@@ -433,7 +531,7 @@ class ArrayBufferStream{
      * @param {number} [offset=0] write offset in destination buffer
      * @returns 
      */
-     getNextFloat32Array(length, dest, offset){
+    getNextFloat32Array(length, dest, offset){
         dest = dest || new Float32Array(length);
         offset = Math.floor(offset || 0);
 
@@ -449,7 +547,7 @@ class ArrayBufferStream{
      * Adds numeric value(s) as FLOAT64, advances cursor
      * @param  {...number} val 
      */
-     writeFloat64(...val){
+    writeFloat64(...val){
         const n = val?.length;
         for(let i = 0; i < n; ++i){
             this.dv.setFloat64(this.cursor, val[i], this.littleEndian);
@@ -475,7 +573,7 @@ class ArrayBufferStream{
      * @param {number} [offset=0] write offset in destination buffer
      * @returns 
      */
-     getNextFloat64Array(length, dest, offset){
+    getNextFloat64Array(length, dest, offset){
         dest = dest || new Float64Array(length);
         offset = Math.floor(offset || 0);
 

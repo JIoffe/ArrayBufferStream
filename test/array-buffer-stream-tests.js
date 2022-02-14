@@ -71,6 +71,24 @@ describe('ArrayBufferStream Tests', () => {
             done();
         });
 
+        it('Should clamp to valid range', (done) => {
+            arrayBufferStream.writeUint8Clamped(15);
+            arrayBufferStream.writeUint8Clamped(4124);
+            arrayBufferStream.writeUint8Clamped(-141);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUint8();
+            a.should.equal(15);
+
+            a = arrayBufferStream.getNextUint8();
+            a.should.equal(0xFF);
+
+            a = arrayBufferStream.getNextUint8();
+            a.should.equal(0);
+            done();
+        });
+
         it('Should write multiple UINT8 values', (done) => {
             arrayBufferStream.writeUint8(15, 24, 52);
 
@@ -162,6 +180,24 @@ describe('ArrayBufferStream Tests', () => {
 
             a = arrayBufferStream.getNextInt8();
             a.should.equal(-52);
+            done();
+        });
+
+        it('Should clamp to valid range', (done) => {
+            arrayBufferStream.writeInt8Clamped(15);
+            arrayBufferStream.writeInt8Clamped(4124);
+            arrayBufferStream.writeInt8Clamped(-141141);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextInt8();
+            a.should.equal(15);
+
+            a = arrayBufferStream.getNextInt8();
+            a.should.equal(127);
+
+            a = arrayBufferStream.getNextInt8();
+            a.should.equal(-128);
             done();
         });
 
@@ -259,6 +295,24 @@ describe('ArrayBufferStream Tests', () => {
             done();
         });
 
+        it('Should clamp to valid range', (done) => {
+            arrayBufferStream.writeUint16Clamped(15);
+            arrayBufferStream.writeUint16Clamped(0xFFFF13AC);
+            arrayBufferStream.writeUint16Clamped(-141);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUint16();
+            a.should.equal(15);
+
+            a = arrayBufferStream.getNextUint16();
+            a.should.equal(0xFFFF);
+
+            a = arrayBufferStream.getNextUint16();
+            a.should.equal(0);
+            done();
+        });
+
         it('Should write multiple UINT16 values', (done) => {
             arrayBufferStream.writeUint16(2000, 3000, 52);
 
@@ -350,6 +404,24 @@ describe('ArrayBufferStream Tests', () => {
 
             a = arrayBufferStream.getNextInt16();
             a.should.equal(-52);
+            done();
+        });
+
+        it('Should clamp to valid range', (done) => {
+            arrayBufferStream.writeInt16Clamped(15);
+            arrayBufferStream.writeInt16Clamped(0xFFFFF12);
+            arrayBufferStream.writeInt16Clamped(-0xFFFF12);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextInt16();
+            a.should.equal(15);
+
+            a = arrayBufferStream.getNextInt16();
+            a.should.equal(0x7FFF);
+
+            a = arrayBufferStream.getNextInt16();
+            a.should.equal(-32768);
             done();
         });
 
@@ -447,6 +519,24 @@ describe('ArrayBufferStream Tests', () => {
             done();
         });
 
+        it('Should clamp to valid range', (done) => {
+            arrayBufferStream.writeUint32Clamped(15);
+            arrayBufferStream.writeUint32Clamped(Number.MAX_SAFE_INTEGER);
+            arrayBufferStream.writeUint32Clamped(-Number.MAX_SAFE_INTEGER);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUint32();
+            a.should.equal(15);
+
+            a = arrayBufferStream.getNextUint32();
+            a.should.equal(0xFFFFFFFF);
+
+            a = arrayBufferStream.getNextUint32();
+            a.should.equal(0);
+            done();
+        });
+
         it('Should write multiple UINT32 values', (done) => {
             arrayBufferStream.writeUint32(0x00FFFFFF, 0x00F00F00, 52);
 
@@ -538,6 +628,24 @@ describe('ArrayBufferStream Tests', () => {
 
             a = arrayBufferStream.getNextInt32();
             a.should.equal(-52);
+            done();
+        });
+
+        it('Should clamp to valid range', (done) => {
+            arrayBufferStream.writeInt32Clamped(15);
+            arrayBufferStream.writeInt32Clamped(Number.MAX_SAFE_INTEGER);
+            arrayBufferStream.writeInt32Clamped(-Number.MAX_SAFE_INTEGER);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextInt32();
+            a.should.equal(15);
+
+            a = arrayBufferStream.getNextInt32();
+            a.should.equal(0x7FFFFFFF);
+
+            a = arrayBufferStream.getNextInt32();
+            a.should.equal(-2147483648);
             done();
         });
 
@@ -823,6 +931,24 @@ describe('ArrayBufferStream Tests', () => {
             done();
         });
 
+        it('Should clamp to valid range', (done) => {
+            arrayBufferStream.writeUNorm8Clamped(-200);
+            arrayBufferStream.writeUNorm8Clamped(0.5);
+            arrayBufferStream.writeUNorm8Clamped(200);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(0, 0.01);
+
+            a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(0.5, 0.01);
+
+            a = arrayBufferStream.getNextUNorm8();
+            a.should.be.approximately(1, 0.01);
+            done();
+        });
+
         it('Should write multiple UNORM8 values', (done) => {
             arrayBufferStream.writeUNorm8(0.2, 0.5, 1);
 
@@ -908,6 +1034,24 @@ describe('ArrayBufferStream Tests', () => {
 
             let a = arrayBufferStream.getNextUNorm16();
             a.should.be.approximately(0.2, 0.001);
+
+            a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(0.5, 0.001);
+
+            a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(1, 0.001);
+            done();
+        });
+
+        it('Should clamp to valid range', (done) => {
+            arrayBufferStream.writeUNorm16Clamped(-200);
+            arrayBufferStream.writeUNorm16Clamped(0.5);
+            arrayBufferStream.writeUNorm16Clamped(200);
+
+            arrayBufferStream.setCursor(0);
+
+            let a = arrayBufferStream.getNextUNorm16();
+            a.should.be.approximately(0, 0.091);
 
             a = arrayBufferStream.getNextUNorm16();
             a.should.be.approximately(0.5, 0.001);

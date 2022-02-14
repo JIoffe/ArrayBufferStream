@@ -1,6 +1,6 @@
 {
   "name": "@jioffe/arraybufferstream",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Utility for read and write operations on ArrayBuffer instances",
   "main": "index.js",
   "type": "module",
